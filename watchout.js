@@ -89,6 +89,8 @@ var setScore = function(){
   var collision = false
   var numCollisions = 0;
 
+
+
   if (collision === true) {
     scoreBoard.currentScore = 0;
     numCollisions++;
