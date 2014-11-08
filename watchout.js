@@ -68,7 +68,7 @@ var moveEnemies = function(){
 
 };
 
-setInterval(moveEnemies, 1000);
+
 
 var drag = d3.behavior.drag()
              .on('dragstart', function() { player.style('fill', 'red'); })
@@ -86,24 +86,40 @@ var player = svg.selectAll("player") ///inject variable;
   .attr("fill", "blue")
   .call(drag);
 
+//for player, if the absolute value any enemy's x or y value
+//minus player's x or y value is less than player's radius plus enemy's
+//radius, there is a collisions
 
+var setScore = function(){
+  var collision = false
+  var numCollisions = 0;
 
-var render = function(enemy_data){
-  //put them in new spots
-  //check collision
-  //on collision
-  //tween collision
+  if (collision === true) {
+    scoreBoard.currentScore = 0;
+    numCollisions++;
+  }
+
+  if(scoreBoard.highScore<scoreBoard.currentScore){
+    scoreBoard.highScore = scoreBoard.currentScore;
+  }
+  scoreBoard.currentScore++;
+  d3.select('.current').selectAll('span')
+    .text(scoreBoard.currentScore);
+  d3.select('.high').selectAll('span')
+    .text(scoreBoard.highScore);
+  d3.select('.collisions').selectAll('span')
+    .text(numCollisions);
 }
-// setInterval(function(){console.log('interval');return moveEnemies;}, 1000);
 
-//
-//
-//player();
-//enemies();
+setInterval(moveEnemies, 1000);
+setInterval(setScore, 50);
 
-// //checkCollision
+
+
+//check collision
+//on collision
+//tween collision
+//checkCollision
 // //onCollision set current score
 // //if current score ever exceeds high score then current score is high score
-// //
-// //add elements to the SVG file
 
