@@ -7,6 +7,7 @@ var gameOptions={
 var scoreBoard = {
   currentScore: 0,
   highScore: 0,
+  numCollisions: 0
 
 }
 
@@ -48,13 +49,20 @@ var enemies = svg.selectAll(".enemy") ///inject variable;
   .attr("fill", "black")
   .attr("class", "enemy");
 
-  var randW = Math.random() * gameOptions.width;
-  var randH = Math.random() * gameOptions.height;
+var randW = Math.random() * gameOptions.width;
+var randH = Math.random() * gameOptions.height;
 
 var moveEnemies = function(){
   svg.selectAll(".enemy")
   .data(createEnemies(), function(d){ return d.id;})
   .transition().duration(1000)
+  .tween("detectCollision", function() {
+      // var i = d3.interpolate(x,player.cx);     ///interpolate?
+      // var i = d3.interpolate(y,player.cy);
+      // return function(t) {                                    ///what is t?
+//
+      // }
+  })
   .attr("cx", function(d){return d.x;})
   .attr("cy", function(d){return d.y;})
   .attr("r", "10")
@@ -77,36 +85,56 @@ var player = svg.selectAll("player") ///inject variable;
   .append("circle")
   .attr("cx", "50%")
   .attr("cy", "50%")
-  .attr("r", "15")
+  .attr("r", "10")
   .attr("fill", "blue")
   .call(drag);
 
 //for player, if the absolute value any enemy's x or y value
 //minus player's x or y value is less than player's radius plus enemy's
 //radius, there is a collisions
+var allEnemies = svg.selectAll('.enemy');
+  //cx value +- 5 from player
+
+
+
+var detectCollisions = function () {
+  console.log('detectCollisions');
+  console.log(enemies[0]);
+
+  var playerX = player[0][0].cx.animVal.value;
+  var playerY = player[0][0].cy.animVal.value;
+  var playerR = player[0][0].r.animVal.value;
+  // Check for collisions on all enemies
+  for (var i = 0; i < enemies[0].length; i++) {
+    var enemy = enemies[0][i];
+    var x = enemy.cx.animVal.value;
+    var y = enemy.cy.animVal.value;
+    var r = enemy.r.animVal.value;
+    // Calculcate the distance between x,y and playerX, playerY
+    var distance = Math.pow((playerX - x), 2) + Math.pow((playerY - y), 2)
+    var rSquared = Math.pow((playerR + r), 2)
+    if(distance < rSquared) {
+      scoreBoard.currentScore = 0;
+      scoreBoard.numCollisions++;
+    }
+  }
+};
 
 var setScore = function(){
-  var collision = false
-  var numCollisions = 0;
+  scoreBoard.currentScore++;
 
-
-
-  if (collision === true) {
-    scoreBoard.currentScore = 0;
-    numCollisions++;
-  }
-
-  if(scoreBoard.highScore<scoreBoard.currentScore){
+  if(scoreBoard.highScore < scoreBoard.currentScore){
     scoreBoard.highScore = scoreBoard.currentScore;
   }
-  scoreBoard.currentScore++;
+
   d3.select('.current').selectAll('span')
     .text(scoreBoard.currentScore);
   d3.select('.high').selectAll('span')
     .text(scoreBoard.highScore);
   d3.select('.collisions').selectAll('span')
-    .text(numCollisions);
-}
+    .text(scoreBoard.numCollisions);
+};
 
 setInterval(moveEnemies, 1000);
-setInterval(setScore, 50);
+setInterval(setScore, 100);
+setInterval(detectCollisions, 10);
