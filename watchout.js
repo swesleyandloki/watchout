@@ -44,14 +44,6 @@ createEnemies = function() {
 
   // console.log(createEnemies());
 
-var player = svg.selectAll("player") ///inject variable;
-  .data(numPlayers)
-  .enter()
-  .append("circle")
-  .attr("cx", "50%")
-  .attr("cy", "50%")
-  .attr("r", "15")
-  .attr("fill", "blue");
 
 var enemies = svg.selectAll(".enemy") ///inject variable;
   .data(createEnemies())
@@ -77,6 +69,23 @@ var moveEnemies = function(){
 };
 
 setInterval(moveEnemies, 1000);
+
+var drag = d3.behavior.drag()
+             .on('dragstart', function() { player.style('fill', 'red'); })
+             .on('drag', function() { player.attr('cx', d3.event.x)
+                                            .attr('cy', d3.event.y); })
+             .on('dragend', function() { player.style('fill', 'blue'); });
+
+var player = svg.selectAll("player") ///inject variable;
+  .data(numPlayers)
+  .enter()
+  .append("circle")
+  .attr("cx", "50%")
+  .attr("cy", "50%")
+  .attr("r", "15")
+  .attr("fill", "blue")
+  .call(drag);
+
 
 
 var render = function(enemy_data){
