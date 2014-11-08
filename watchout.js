@@ -1,16 +1,13 @@
-
-
 var gameOptions={
   height: 450,
   width: 700,
   nEnemies: 30,
-  padding: 20
 }
-
 
 var scoreBoard = {
   currentScore: 0,
-  highScore: 0
+  highScore: 0,
+
 }
 
 var axes = {
@@ -31,19 +28,14 @@ createEnemies = function() {
   var enemyData = [];
   for(var i=0; i<gameOptions.nEnemies; i++){
     enemyData.push({
-        id: i,
-        x: Math.random() * gameOptions.width,
-        y: Math.random() * gameOptions.height
-
+      id: i,
+      x: Math.random() * gameOptions.width,
+      y: Math.random() * gameOptions.height
     });
   }
 
   return enemyData;
 };
-
-
-  // console.log(createEnemies());
-
 
 var enemies = svg.selectAll(".enemy") ///inject variable;
   .data(createEnemies())
@@ -56,6 +48,9 @@ var enemies = svg.selectAll(".enemy") ///inject variable;
   .attr("fill", "black")
   .attr("class", "enemy");
 
+  var randW = Math.random() * gameOptions.width;
+  var randH = Math.random() * gameOptions.height;
+
 var moveEnemies = function(){
   svg.selectAll(".enemy")
   .data(createEnemies(), function(d){ return d.id;})
@@ -65,16 +60,16 @@ var moveEnemies = function(){
   .attr("r", "10")
   .attr("fill", "black")
   .attr("class", "enemy");
-
 };
 
-
-
 var drag = d3.behavior.drag()
-             .on('dragstart', function() { player.style('fill', 'red'); })
-             .on('drag', function() { player.attr('cx', d3.event.x)
-                                            .attr('cy', d3.event.y); })
-             .on('dragend', function() { player.style('fill', 'blue'); });
+  .on('dragstart', function() { player.style('fill', 'red'); })
+  .on('drag', function(){
+    player.attr('cx', d3.event.x).attr('cy', d3.event.y);
+  })
+  .on('dragend', function(){
+    player.style('fill', 'blue');
+  });
 
 var player = svg.selectAll("player") ///inject variable;
   .data(numPlayers)
@@ -113,13 +108,3 @@ var setScore = function(){
 
 setInterval(moveEnemies, 1000);
 setInterval(setScore, 50);
-
-
-
-//check collision
-//on collision
-//tween collision
-//checkCollision
-// //onCollision set current score
-// //if current score ever exceeds high score then current score is high score
-
