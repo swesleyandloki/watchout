@@ -11,10 +11,6 @@ var scoreBoard = {
 
 }
 
-var axes = {
-  x: d3.scale.linear().domain([0,100]).range([0,gameOptions.width]),
-  y: d3.scale.linear().domain([0,100]).range([0,gameOptions.height])
-}
 
 var gameBoard = d3.select('.container').append('svg:svg')
   .attr("class", "board")
@@ -27,17 +23,19 @@ var numPlayers = ["player"]; //cursor
 
 createEnemies = function() {
   var enemyData = [];
+  var enemyColors = ['#3FBF7F', '#3FBFBF','#3F7FBF']
   for(var i=0; i<gameOptions.nEnemies; i++){
     enemyData.push({
       id: i,
       x: Math.random() * gameOptions.width,
-      y: Math.random() * gameOptions.height
+      y: Math.random() * gameOptions.height,
+      r: Math.random() * (5-2) + 2,
+      c: enemyColors[Math.floor(Math.random()*enemyColors.length)]
     });
   }
 
   return enemyData;
 };
-
 var enemies = svg.selectAll(".enemy") ///inject variable;
   .data(createEnemies())
   .enter()
@@ -45,7 +43,7 @@ var enemies = svg.selectAll(".enemy") ///inject variable;
   .attr("cx", function(d){return d.x;})
   .attr("cy", function(d){return d.y;})
   .attr("id", function(d){return d.id;})
-  .attr("r", "10")
+  .attr("r", function(d){return d.r;})
   .attr("fill", "black")
   .attr("class", "enemy");
 
@@ -56,27 +54,20 @@ var moveEnemies = function(){
   svg.selectAll(".enemy")
   .data(createEnemies(), function(d){ return d.id;})
   .transition().duration(1000)
-  .tween("detectCollision", function() {
-      // var i = d3.interpolate(x,player.cx);     ///interpolate?
-      // var i = d3.interpolate(y,player.cy);
-      // return function(t) {                                    ///what is t?
-//
-      // }
-  })
   .attr("cx", function(d){return d.x;})
   .attr("cy", function(d){return d.y;})
-  .attr("r", "10")
-  .attr("fill", "black")
+  .attr("r", function(d){return d.r;})
+  .attr("fill", function(d){return d.c;})
   .attr("class", "enemy");
 };
 
 var drag = d3.behavior.drag()
-  .on('dragstart', function() { player.style('fill', 'red'); })
+  .on('dragstart', function() { player.style('fill', '#267226'); })
   .on('drag', function(){
     player.attr('cx', d3.event.x).attr('cy', d3.event.y);
   })
   .on('dragend', function(){
-    player.style('fill', 'blue');
+    player.style('fill', '#264C72');
   });
 
 var player = svg.selectAll("player") ///inject variable;
@@ -86,7 +77,7 @@ var player = svg.selectAll("player") ///inject variable;
   .attr("cx", "50%")
   .attr("cy", "50%")
   .attr("r", "10")
-  .attr("fill", "blue")
+  .attr("fill", "#267226")
   .call(drag);
 
 //for player, if the absolute value any enemy's x or y value
@@ -98,9 +89,6 @@ var allEnemies = svg.selectAll('.enemy');
 
 
 var detectCollisions = function () {
-  console.log('detectCollisions');
-  console.log(enemies[0]);
-
   var playerX = player[0][0].cx.animVal.value;
   var playerY = player[0][0].cy.animVal.value;
   var playerR = player[0][0].r.animVal.value;
@@ -137,4 +125,4 @@ var setScore = function(){
 
 setInterval(moveEnemies, 1000);
 setInterval(setScore, 100);
-setInterval(detectCollisions, 10);
+setInterval(detectCollisions, 50);
