@@ -80,13 +80,6 @@ var player = svg.selectAll("player") ///inject variable;
   .attr("fill", "silver")
   .call(drag);
 
-//for player, if the absolute value any enemy's x or y value
-//minus player's x or y value is less than player's radius plus enemy's
-//radius, there is a collisions
-var allEnemies = svg.selectAll('.enemy');
-  //cx value +- 5 from player
-
-
 
 var detectCollisions = function () {
   var playerX = player[0][0].cx.animVal.value;
