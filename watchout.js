@@ -48,9 +48,9 @@ var player = svg.selectAll("player") ///inject variable;
   .data(numPlayers)
   .enter()
   .append("circle")
-  .attr("cx", "25")
-  .attr("cy", "25")
-  .attr("r", "10")
+  .attr("cx", "50%")
+  .attr("cy", "50%")
+  .attr("r", "15")
   .attr("fill", "blue");
 
 var enemies = svg.selectAll(".enemy") ///inject variable;
@@ -60,16 +60,17 @@ var enemies = svg.selectAll(".enemy") ///inject variable;
   .attr("cx", function(d){return d.x;})
   .attr("cy", function(d){return d.y;})
   .attr("id", function(d){return d.id;})
-  .attr("r", "5")
+  .attr("r", "10")
   .attr("fill", "black")
   .attr("class", "enemy");
 
 var moveEnemies = function(){
   svg.selectAll(".enemy")
   .data(createEnemies(), function(d){ return d.id;})
+  .transition().duration(1000)
   .attr("cx", function(d){return d.x;})
   .attr("cy", function(d){return d.y;})
-  .attr("r", "5")
+  .attr("r", "10")
   .attr("fill", "black")
   .attr("class", "enemy");
 
