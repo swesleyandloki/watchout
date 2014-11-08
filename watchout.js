@@ -32,16 +32,17 @@ createEnemies = function() {
   for(var i=0; i<gameOptions.nEnemies; i++){
     enemyData.push({
         id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100
+        x: Math.random() * gameOptions.width,
+        y: Math.random() * gameOptions.height
 
     });
   }
+
   return enemyData;
 };
 
 
-  console.log(createEnemies());
+  // console.log(createEnemies());
 
 var player = svg.selectAll("player") ///inject variable;
   .data(numPlayers)
@@ -52,22 +53,47 @@ var player = svg.selectAll("player") ///inject variable;
   .attr("r", "10")
   .attr("fill", "blue");
 
-var enemies = svg.selectAll("enemies") ///inject variable;
+var enemies = svg.selectAll(".enemy") ///inject variable;
   .data(createEnemies())
   .enter()
   .append("circle")
-  .attr("cx", '10')
-  .attr("cy", '10')
+  .attr("cx", function(d){return d.x;})
+  .attr("cy", function(d){return d.y;})
+  .attr("id", function(d){return d.id;})
   .attr("r", "5")
-  .attr("fill", "black");
+  .attr("fill", "black")
+  .attr("class", "enemy");
+
+var moveEnemies = function(){
+  svg.selectAll(".enemy")
+  .data(createEnemies(), function(d){ return d.id;})
+  .attr("cx", function(d){return d.x;})
+  .attr("cy", function(d){return d.y;})
+  .attr("r", "5")
+  .attr("fill", "black")
+  .attr("class", "enemy");
+
+};
+
+setInterval(moveEnemies, 1000);
+
+
+var render = function(enemy_data){
+  //put them in new spots
+  //check collision
+  //on collision
+  //tween collision
+}
+// setInterval(function(){console.log('interval');return moveEnemies;}, 1000);
+
 //
-player();
-enemies();
+//
+//player();
+//enemies();
 
 // //checkCollision
 // //onCollision set current score
 // //if current score ever exceeds high score then current score is high score
 // //
 // //add elements to the SVG file
-
 
