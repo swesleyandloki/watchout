@@ -8,7 +8,6 @@ var scoreBoard = {
   currentScore: 0,
   highScore: 0,
   numCollisions: 0
-
 }
 
 
@@ -76,10 +75,11 @@ var player = svg.selectAll("player") ///inject variable;
   .append("circle")
   .attr("cx", "50%")
   .attr("cy", "50%")
-  .attr("r", "10")
+  .attr("r", "5")
   .attr("fill", "silver")
   .call(drag);
 
+var prevEnemy;
 
 var detectCollisions = function () {
   var playerX = player[0][0].cx.animVal.value;
@@ -95,8 +95,11 @@ var detectCollisions = function () {
     var distance = Math.pow((playerX - x), 2) + Math.pow((playerY - y), 2)
     var rSquared = Math.pow((playerR + r), 2)
     if(distance < rSquared) {
-      scoreBoard.currentScore = 0;
-      scoreBoard.numCollisions++;
+      if (enemy.id !== prevEnemy) {
+        prevEnemy = enemy.id;
+        scoreBoard.currentScore = 0;
+        scoreBoard.numCollisions++;
+      }
     }
   }
 };
@@ -118,4 +121,4 @@ var setScore = function(){
 
 setInterval(moveEnemies, 1000);
 setInterval(setScore, 100);
-setInterval(detectCollisions, 50);
+d3.timer(detectCollisions);
