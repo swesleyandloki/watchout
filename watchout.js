@@ -44,7 +44,7 @@ var enemies = svg.selectAll(".enemy") ///inject variable;
   .attr("cy", function(d){return d.y;})
   .attr("id", function(d){return d.id;})
   .attr("r", function(d){return d.r;})
-  .attr("fill", "black")
+  .attr("fill", function(d){return d.c;})
   .attr("class", "enemy");
 
 var randW = Math.random() * gameOptions.width;
@@ -62,12 +62,12 @@ var moveEnemies = function(){
 };
 
 var drag = d3.behavior.drag()
-  .on('dragstart', function() { player.style('fill', '#267226'); })
+  .on('dragstart', function() { player.style('fill', 'silver'); })
   .on('drag', function(){
     player.attr('cx', d3.event.x).attr('cy', d3.event.y);
   })
   .on('dragend', function(){
-    player.style('fill', '#264C72');
+    player.style('fill', 'silver');
   });
 
 var player = svg.selectAll("player") ///inject variable;
@@ -77,7 +77,7 @@ var player = svg.selectAll("player") ///inject variable;
   .attr("cx", "50%")
   .attr("cy", "50%")
   .attr("r", "10")
-  .attr("fill", "#267226")
+  .attr("fill", "silver")
   .call(drag);
 
 //for player, if the absolute value any enemy's x or y value

@@ -2,11 +2,27 @@
 body{
   font-family: Courier;
   color: #3F7FBF;
+  margin-left: 25%;
+  /*background-image: url('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTBP5CHccRVKVbcvPWhhIRH6J_4vDHqTYiL0LH9ZRdUjgSwgOeWYA');*/
+  /*background-repeat: no-repeat;*/
+  /*background-size: cover;*/
+  background-color: silver;
 }
 
 h3{
   color: #2D4C6B;
 }
+
+.scoreboard{
+  text-align: right;
+  width: 59%;
+}
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
-
+.board{
+  /*margin-left: 25%;*/
+  border: solid;
+  background-color: #2D4C6B;
+  /*background: silver;*/
+  /*padding: 2%;*/
+}
