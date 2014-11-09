@@ -22,7 +22,10 @@ Feel free to use it if you like. */
 .board{
   /*margin-left: 25%;*/
   border: solid;
+  border-radius:10px;
   background-color: #2D4C6B;
   /*background: silver;*/
   /*padding: 2%;*/
 }
+
+

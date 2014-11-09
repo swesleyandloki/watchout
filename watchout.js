@@ -1,15 +1,17 @@
+(function(){
+
+////////////
 var gameOptions={
-  height: 450,
-  width: 700,
+  height: 450 * 1.0,
+  width: 700 * 1.0,
   nEnemies: 30,
-}
+};
 
 var scoreBoard = {
   currentScore: 0,
   highScore: 0,
   numCollisions: 0
-}
-
+};
 
 var gameBoard = d3.select('.container').append('svg:svg')
   .attr("class", "board")
@@ -18,7 +20,10 @@ var gameBoard = d3.select('.container').append('svg:svg')
 
 var svg = d3.select('svg'); //our svg game board element
 
-var numPlayers = ["player"]; //cursor
+var playerData = ["player"]; //cursor
+
+
+
 
 createEnemies = function() {
   var enemyData = [];
@@ -32,9 +37,9 @@ createEnemies = function() {
       c: enemyColors[Math.floor(Math.random()*enemyColors.length)]
     });
   }
-
   return enemyData;
 };
+
 var enemies = svg.selectAll(".enemy") ///inject variable;
   .data(createEnemies())
   .enter()
@@ -45,9 +50,6 @@ var enemies = svg.selectAll(".enemy") ///inject variable;
   .attr("r", function(d){return d.r;})
   .attr("fill", function(d){return d.c;})
   .attr("class", "enemy");
-
-var randW = Math.random() * gameOptions.width;
-var randH = Math.random() * gameOptions.height;
 
 var moveEnemies = function(){
   svg.selectAll(".enemy")
@@ -65,15 +67,15 @@ var moveEnemies = function(){
 var drag = d3.behavior.drag()
   .on('drag', function(){
     player.attr('cx', d3.event.x).attr('cy', d3.event.y);
-  })
+  });
 
 var player = svg.selectAll("player") ///inject variable;
-  .data(numPlayers)
+  .data(playerData)
   .enter()
   .append("circle")
   .attr("cx", "50%")
   .attr("cy", "50%")
-  .attr("r", "5")
+  .attr("r", "7")
   .attr("fill", "silver")
   .call(drag);
 
@@ -98,8 +100,8 @@ var detectCollisions = function () {
         scoreBoard.currentScore = 0;
         scoreBoard.numCollisions++;
         player.attr("fill", "#B0F852");
-        player.attr("r", "8")
-        setTimeout(function(){return player.attr("fill", "white").attr("r", "5")}, 200);
+        player.attr("r", "10")
+        setTimeout(function(){return player.attr("fill", "white").attr("r", "7")}, 200);
       }
     }
   }
@@ -107,7 +109,6 @@ var detectCollisions = function () {
 
 var setScore = function(){
   scoreBoard.currentScore++;
-
   if(scoreBoard.highScore < scoreBoard.currentScore){
     scoreBoard.highScore = scoreBoard.currentScore;
   }
@@ -120,6 +121,8 @@ var setScore = function(){
     .text(scoreBoard.numCollisions);
 };
 
-setInterval(moveEnemies, 1000);
+setInterval(moveEnemies, 2000);
 setInterval(setScore, 100);
 d3.timer(detectCollisions);
+
+})();
