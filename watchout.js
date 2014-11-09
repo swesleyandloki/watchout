@@ -22,9 +22,6 @@ var svg = d3.select('svg'); //our svg game board element
 
 var playerData = ["player"]; //cursor
 
-
-
-
 createEnemies = function() {
   var enemyData = [];
   var enemyColors = ['#3FBF7F', '#3FBFBF','#3F7FBF']
