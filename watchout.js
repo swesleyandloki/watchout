@@ -52,7 +52,9 @@ var randH = Math.random() * gameOptions.height;
 var moveEnemies = function(){
   svg.selectAll(".enemy")
   .data(createEnemies(), function(d){ return d.id;})
-  .transition().duration(1000)
+  .transition()
+  .ease('elastic')
+  .duration(1000)
   .attr("cx", function(d){return d.x;})
   .attr("cy", function(d){return d.y;})
   .attr("r", function(d){return d.r;})
@@ -61,13 +63,9 @@ var moveEnemies = function(){
 };
 
 var drag = d3.behavior.drag()
-  .on('dragstart', function() { player.style('fill', 'silver'); })
   .on('drag', function(){
     player.attr('cx', d3.event.x).attr('cy', d3.event.y);
   })
-  .on('dragend', function(){
-    player.style('fill', 'silver');
-  });
 
 var player = svg.selectAll("player") ///inject variable;
   .data(numPlayers)
@@ -99,6 +97,9 @@ var detectCollisions = function () {
         prevEnemy = enemy.id;
         scoreBoard.currentScore = 0;
         scoreBoard.numCollisions++;
+        player.attr("fill", "#B0F852");
+        player.attr("r", "8")
+        setTimeout(function(){return player.attr("fill", "white").attr("r", "5")}, 200);
       }
     }
   }
